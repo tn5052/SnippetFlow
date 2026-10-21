@@ -1,10 +1,14 @@
 # SnippetFlow Compatibility Specification
 
+Project: [SnippetFlow](https://github.com/tn5052/SnippetFlow)
+
 Status: Compatibility research for SnippetFlow, based on static analysis of TextSniper 1.11 (525).
+
+Method: Produced with the REA (reverse-engineer-anything) workflow from analysis of the actual shipped TextSniper 1.11 (525) app bundle.
 
 Target: `/Applications/TextSniper.app`, bundle `com.valerijs.boguckis.TextSniper`.
 
-Purpose: define the observable behavior required for SnippetFlow, an independent clean-room macOS menu-bar OCR utility. This document records behavior and evidence only; it contains no proprietary implementation code or assets. Do not copy TextSniper artwork, icons, fonts, or source code. TextSniper is a trademark of its respective owner.
+Purpose: define the observable behavior required for SnippetFlow, an independent macOS menu-bar OCR utility. This document records behavior and evidence only; it contains no proprietary implementation code or assets. Do not copy TextSniper artwork, icons, fonts, or source code. TextSniper is a trademark of its respective owner.
 
 Evidence notation:
 
