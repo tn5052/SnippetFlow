@@ -1,5 +1,7 @@
 # SnippetFlow
 
+Source: <https://github.com/tn5052/SnippetFlow>
+
 SnippetFlow is a lightweight, open-source macOS menu-bar utility for capturing
 text from the screen with on-device OCR. It supports plain text capture, QR and
 barcode reading, optional clipboard history, text-to-speech, custom words, and
