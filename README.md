@@ -166,7 +166,7 @@ Sources/SnippetFlow/       Application source
 Tests/SnippetFlowTests/    Unit tests
 Support/                   Info.plist and app icon
 build.sh                   App bundle assembly script
-CLONE_SPEC.md              Compatibility research notes
+CLONE_SPEC.md              Compatibility research from REA analysis
 ```
 
 ## Contributing
@@ -182,12 +182,23 @@ behavior that informed the implementation. Do not submit source code, artwork,
 icons, fonts, or other assets copied from the reference app or any other
 third-party project unless their licenses permit it and attribution is included.
 
-## Compatibility and attribution
+## Compatibility research
 
-SnippetFlow is an independent project. TextSniper is a trademark of its
-respective owner. SnippetFlow is not affiliated with or endorsed by TextSniper.
-No proprietary source code or assets from the reference product are included in
-this repository.
+[`CLONE_SPEC.md`](CLONE_SPEC.md) documents compatibility research for
+SnippetFlow. It was produced with the REA (reverse-engineer-anything) workflow
+from static and runtime analysis of the actual shipped TextSniper 1.11 (525) app
+bundle.
+
+The document records observable behavior, packaging details, and evidence
+references used to define SnippetFlow's compatibility requirements. It does not
+include or redistribute proprietary source code, artwork, icons, fonts, or other
+assets from TextSniper. SnippetFlow is an independent implementation.
+
+## Attribution
+
+TextSniper is a trademark of its respective owner. SnippetFlow is not affiliated
+with or endorsed by TextSniper. No proprietary source code or assets from the
+reference product are included in this repository.
 
 ## License
 
