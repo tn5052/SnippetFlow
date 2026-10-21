@@ -1,78 +1,194 @@
 # SnippetFlow
 
-Source: <https://github.com/tn5052/SnippetFlow>
+SnippetFlow is a lightweight macOS menu-bar app for capturing text from the
+screen with on-device OCR. Select a region, recognize the text, and copy it
+without switching apps. It can also read QR codes and barcodes, import images,
+speak recognized text, and keep an optional clipboard history.
 
-SnippetFlow is a lightweight, open-source macOS menu-bar utility for capturing
-text from the screen with on-device OCR. It supports plain text capture, QR and
-barcode reading, optional clipboard history, text-to-speech, custom words, and
-configurable global shortcuts.
+SnippetFlow has no Dock icon and no persistent main window. It lives in the menu
+bar and stays out of the way until you need it.
 
-SnippetFlow runs as a menu-bar-only app: it has no Dock icon and no persistent
-main window.
+- Source: <https://github.com/tn5052/SnippetFlow>
+- License: [MIT](LICENSE)
 
 ## Features
 
-- Select any screen region and copy the recognized text.
-- Read QR codes and barcodes.
+- Capture text from any screen region using Apple Vision OCR.
+- Read QR codes and barcodes from a selected region.
 - Import an image for OCR.
-- Optionally preserve line breaks.
+- Preserve or collapse line breaks.
+- Auto-detect the recognition language or choose one manually.
+- Improve recognition with a custom words list.
+- Optional text-to-speech with an adjustable speech rate.
 - Optional additive clipboard history.
-- Optional text-to-speech with adjustable rate.
-- Custom words for domain-specific vocabulary.
 - Configurable global shortcuts.
-- Automatic language detection and language selection.
-- Menu-bar onboarding and permission guidance.
+- Launch at login and menu-bar visibility controls.
+- Local-only operation with no telemetry.
 
 ## Requirements
 
 - macOS 13 Ventura or later.
-- Swift 5.9 or later, or the matching Xcode Command Line Tools.
+- Xcode 15 or later, or the Xcode Command Line Tools with Swift 5.9 or later.
 
-## Build
+To install the command-line tools:
 
 ```sh
+xcode-select --install
+swift --version
+```
+
+## Build and install
+
+```sh
+git clone https://github.com/tn5052/SnippetFlow.git
+cd SnippetFlow
 ./build.sh
 open SnippetFlow.app
 ```
 
-The build script compiles the Swift package, assembles `SnippetFlow.app`, copies
-the original project icon, and ad-hoc signs the bundle.
+`build.sh` compiles the Swift package, assembles `SnippetFlow.app`, copies the
+app icon, and ad-hoc signs the bundle. No Apple Developer account is required
+for a local build.
 
-A prebuilt app is intentionally not committed. Build it locally or publish it as
-a release artifact.
+To install, drag `SnippetFlow.app` to `/Applications` and launch it from there.
+The app is not notarized because it is built locally; if macOS warns about an
+app downloaded from the internet, build from source instead.
+
+For a debug build:
+
+```sh
+CONFIG=debug ./build.sh
+```
+
+## First run
+
+1. Launch `SnippetFlow.app`.
+2. Click the menu-bar icon to open the menu.
+3. Follow the onboarding prompt and grant **Screen Recording** permission.
+4. Grant **Accessibility** permission if you want global shortcut handling and
+   paste monitoring.
+5. Open **Preferences...** to choose shortcuts, language, output, and clipboard
+   behavior.
+
+The default capture shortcut is `Command-Shift-2`.
 
 ## Permissions
 
-macOS requires two permissions:
+SnippetFlow uses two macOS privacy permissions:
 
-- **Screen Recording** for region capture.
-- **Accessibility** for reliable global shortcuts and paste monitoring.
+| Permission | Why it is needed |
+| --- | --- |
+| Screen Recording | Required to capture the selected screen region. |
+| Accessibility | Used for reliable global shortcut handling and the optional paste monitor. |
 
-Permissions are tied to the bundle identifier and code signature. If the app is
-rebuilt with a different signature, macOS may require removing and re-adding it
-in System Settings. See the in-app settings screen for direct links.
+Permissions are tied to the app's bundle identifier and code signature. If a
+rebuilt app stops responding to shortcuts or cannot capture the screen, remove
+the existing entries and grant permission again in **System Settings > Privacy &
+Security**.
+
+You can also reset the permissions from Terminal:
+
+```sh
+tccutil reset ScreenCapture com.umarjaved.SnippetFlow
+tccutil reset Accessibility com.umarjaved.SnippetFlow
+```
+
+Relaunch the app and grant access when prompted.
+
+## Usage
+
+| Action | Default shortcut |
+| --- | --- |
+| Capture text | `Command-Shift-2` |
+| Capture with text to speech | `Command-Option-Shift-S` |
+| Toggle keep line breaks | `Command-Option-Shift-L` |
+| Toggle additive clipboard | `Command-Option-Shift-H` |
+
+Other actions, including **Capture Previous Area**, **Capture Without Line
+Breaks**, **Capture With Line Breaks**, and **Read QR/Bar Code**, can be assigned
+from **Preferences > Shortcuts**.
+
+The menu also provides:
+
+- **Take Photo** to import an image from disk for OCR.
+- **Clear Clipboard History** to remove saved clipboard entries.
+- **Stop Speaking** to stop text-to-speech playback.
+
+## Configuration
+
+Open **Preferences...** from the menu bar:
+
+- **General**: language detection, recognition language, line breaks,
+  text-to-speech, link opening, launch at login, menu-bar visibility, sounds,
+  notifications, and permission status.
+- **Shortcuts**: click a shortcut, then press a new key combination. Press
+  `Escape` to cancel.
+- **Custom Words**: comma-separated terms that should be preferred during
+  recognition.
+- **About**: version and project information.
+
+Clipboard history is optional. When enabled, entries are stored in the app's
+local preferences and can be cleared from the menu.
 
 ## Privacy
 
-- OCR and barcode recognition run locally with Apple Vision/VisionKit.
-- SnippetFlow makes no network requests and collects no telemetry.
+- OCR, barcode recognition, and text processing run locally using Apple
+  frameworks.
+- SnippetFlow makes no network requests, collects no telemetry, and requires no
+  account.
 - Clipboard history is stored only in local `UserDefaults`.
-- Clipboard contents are not logged or transmitted.
+- Clipboard contents and recognized text are not logged or transmitted.
+
+Screen captures can contain sensitive information. Review captured text before
+copying it into another service or storing it in clipboard history.
 
 ## Development
+
+Run the test suite:
 
 ```sh
 swift test
 ```
 
-The compatibility research in [`CLONE_SPEC.md`](CLONE_SPEC.md) documents the
-observable behavior that informed the implementation. It contains behavioral
-notes and evidence only; no proprietary source code, artwork, icons, fonts, or
-other assets from the reference app are included.
+The suite currently contains 20 tests covering text processing, clipboard
+behavior, OCR helpers, shortcut storage, and menu construction.
 
-TextSniper is a trademark of its respective owner. SnippetFlow is an independent
-project and is not affiliated with or endorsed by TextSniper.
+Build the app bundle without installing it:
+
+```sh
+./build.sh
+```
+
+## Project structure
+
+```text
+Sources/SnippetFlow/       Application source
+Tests/SnippetFlowTests/    Unit tests
+Support/                   Info.plist and app icon
+build.sh                   App bundle assembly script
+CLONE_SPEC.md              Compatibility research notes
+```
+
+## Contributing
+
+Contributions are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) for the
+development workflow and pull-request expectations.
+
+By participating, you agree to follow the [Code of Conduct](CODE_OF_CONDUCT.md).
+Please report security issues privately as described in [SECURITY.md](SECURITY.md).
+
+The compatibility research in [CLONE_SPEC.md](CLONE_SPEC.md) documents observable
+behavior that informed the implementation. Do not submit source code, artwork,
+icons, fonts, or other assets copied from the reference app or any other
+third-party project unless their licenses permit it and attribution is included.
+
+## Compatibility and attribution
+
+SnippetFlow is an independent project. TextSniper is a trademark of its
+respective owner. SnippetFlow is not affiliated with or endorsed by TextSniper.
+No proprietary source code or assets from the reference product are included in
+this repository.
 
 ## License
 
-MIT. See [`LICENSE`](LICENSE).
+MIT. See [LICENSE](LICENSE).

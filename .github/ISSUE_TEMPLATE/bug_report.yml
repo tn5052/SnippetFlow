@@ -1,0 +1,74 @@
+name: Bug report
+description: Report a reproducible problem with SnippetFlow
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping improve SnippetFlow. Please search existing issues
+        first, and remove sensitive screen content from screenshots or logs.
+  - type: textarea
+    id: summary
+    attributes:
+      label: What happened?
+      description: Describe the problem and its impact.
+      placeholder: SnippetFlow does not...
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Open SnippetFlow
+        2. Press...
+        3. Select...
+        4. Observe...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: SnippetFlow version or commit
+      placeholder: "1.0 or commit SHA"
+    validations:
+      required: true
+  - type: input
+    id: macos
+    attributes:
+      label: macOS version
+      placeholder: "macOS 14.6"
+    validations:
+      required: true
+  - type: dropdown
+    id: permissions
+    attributes:
+      label: Permissions granted
+      multiple: true
+      options:
+        - Screen Recording
+        - Accessibility
+        - Neither
+  - type: textarea
+    id: details
+    attributes:
+      label: Additional context
+      description: Logs, screenshots, display setup, or other details. Redact sensitive content.
+    validations:
+      required: false
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checklist
+      options:
+        - label: I searched existing issues and did not find a duplicate.
+          required: true
+        - label: I removed sensitive text and personal information from this report.
+          required: true
