@@ -7,6 +7,11 @@ and this project uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
 ## [Unreleased]
 
+### Fixed
+
+- Detect denied Screen Recording permission and show actionable guidance
+  instead of a generic screen-capture error.
+
 ## [1.0] - 2026-10-21
 
 ### Added

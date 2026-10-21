@@ -1,20 +1,28 @@
 import AppKit
+import CoreGraphics
 import Foundation
 
 enum ScreenCaptureError: LocalizedError {
     case failed(String)
     case emptyResult
+    case permissionDenied
 
     var errorDescription: String? {
         switch self {
         case .failed(let message): return message
         case .emptyResult: return "The capture did not produce an image."
+        case .permissionDenied:
+            return "Screen Recording permission is required. Enable SnippetFlow in System Settings > Privacy & Security > Screen Recording, then relaunch the app."
         }
     }
 }
 
 final class ScreenCapturer {
     static func capture(rect: CGRect, mute: Bool) throws -> URL {
+        guard CGPreflightScreenCaptureAccess() else {
+            throw ScreenCaptureError.permissionDenied
+        }
+
         let directory = try cacheDirectory()
         let url = directory.appendingPathComponent("capture-\(UUID().uuidString).png")
 
@@ -46,8 +54,11 @@ final class ScreenCapturer {
 
         guard process.terminationStatus == 0 else {
             let data = errorPipe.fileHandleForReading.readDataToEndOfFile()
-            let message = String(data: data, encoding: .utf8)?.trimmingCharacters(in: .whitespacesAndNewlines)
-            throw ScreenCaptureError.failed(message?.isEmpty == false ? message! : "Screen capture failed.")
+            let message = String(data: data, encoding: .utf8)?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+            if isPermissionFailure(message) {
+                throw ScreenCaptureError.permissionDenied
+            }
+            throw ScreenCaptureError.failed(message.isEmpty ? "Screen capture failed." : message)
         }
 
         guard FileManager.default.fileExists(atPath: url.path),
@@ -61,6 +72,13 @@ final class ScreenCapturer {
 
     static func remove(_ url: URL) {
         try? FileManager.default.removeItem(at: url)
+    }
+
+    static func isPermissionFailure(_ message: String) -> Bool {
+        let lowercased = message.lowercased()
+        return lowercased.contains("could not create image")
+            || lowercased.contains("declined tcc")
+            || lowercased.contains("screen recording")
     }
 
     private static func cacheDirectory() throws -> URL {

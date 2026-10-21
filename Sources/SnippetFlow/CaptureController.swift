@@ -207,12 +207,19 @@ final class CaptureController {
             return
         }
 
-        NotificationPresenter.shared.show("Something went Wrong", force: true)
-        SpeechManager.shared.speakStatus("Something went Wrong")
+        if case ScreenCaptureError.permissionDenied = error {
+            NotificationPresenter.shared.show("Screen Recording Permission Required", force: true)
+            SpeechManager.shared.speakStatus("Screen Recording Permission Required")
+            PermissionManager.shared.showScreenRecordingPermissionAlert()
+            return
+        }
+
+        NotificationPresenter.shared.show("Something Went Wrong", force: true)
+        SpeechManager.shared.speakStatus("Something Went Wrong")
 
         let alert = NSAlert()
         alert.alertStyle = .warning
-        alert.messageText = "Something went Wrong"
+        alert.messageText = "Something Went Wrong"
         alert.informativeText = "Something went wrong: \(error.localizedDescription)"
         alert.addButton(withTitle: "OK")
         alert.runModal()

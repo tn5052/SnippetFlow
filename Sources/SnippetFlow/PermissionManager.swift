@@ -27,18 +27,26 @@ final class PermissionManager {
             return true
         }
 
+        showScreenRecordingPermissionAlert()
+        return false
+    }
+
+    func showScreenRecordingPermissionAlert() {
         let alert = NSAlert()
         alert.alertStyle = .warning
         alert.messageText = "Screen Recording Permission Required"
-        alert.informativeText = "SnippetFlow needs Screen Recording permission to capture text. Open System Settings, enable SnippetFlow under Privacy & Security > Screen Recording, then relaunch the app."
+        alert.informativeText = "SnippetFlow cannot capture the screen because Screen Recording permission is disabled. Open System Settings > Privacy & Security > Screen Recording, enable SnippetFlow, then quit and reopen the app."
         alert.addButton(withTitle: "Open System Settings")
         alert.addButton(withTitle: "Cancel")
         if alert.runModal() == .alertFirstButtonReturn {
-            if let url = URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_ScreenCapture") {
-                NSWorkspace.shared.open(url)
-            }
+            openScreenRecordingSettings()
         }
-        return false
+    }
+
+    func openScreenRecordingSettings() {
+        if let url = URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_ScreenCapture") {
+            NSWorkspace.shared.open(url)
+        }
     }
 
     func requestAccessibilityPermission() {

@@ -95,6 +95,12 @@ tccutil reset Accessibility com.umarjaved.SnippetFlow
 
 Relaunch the app and grant access when prompted.
 
+If a capture fails with an error such as `could not create image from rect`,
+macOS is blocking Screen Recording; the rectangle itself is not the problem.
+Quit SnippetFlow, reset the permission with the command above, relaunch, and
+enable SnippetFlow under **System Settings > Privacy & Security > Screen
+Recording**. You may need to quit and reopen the app after changing the setting.
+
 ## Usage
 
 | Action | Default shortcut |
@@ -150,8 +156,8 @@ Run the test suite:
 swift test
 ```
 
-The suite currently contains 20 tests covering text processing, clipboard
-behavior, OCR helpers, shortcut storage, and menu construction.
+The suite covers text processing, clipboard behavior, OCR helpers, screen
+capture error handling, shortcut storage, and menu construction.
 
 Build the app bundle without installing it:
 
