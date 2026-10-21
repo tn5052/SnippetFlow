@@ -1,0 +1,30 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Swift Package Manager / Xcode
+.build/
+.build-*
+.swiftpm/
+DerivedData/
+xcuserdata/
+*.xcuserstate
+*.dSYM
+
+# Build output
+*.app
+build/
+dist/
+
+# Local tooling and agent state
+.agents/
+skills-lock.json
+
+# Secrets and local configuration
+.env
+.env.*
+*.key
+*.pem
+*.p12
+*.mobileprovision
